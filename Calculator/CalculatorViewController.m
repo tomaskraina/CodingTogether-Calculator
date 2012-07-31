@@ -66,7 +66,10 @@
 }
 
 - (IBAction)clearPressed:(id)sender {
-    self.historyDisplay.text = nil;
+    self.historyDisplay.text = @"";
+    self.display.text = @"0";
+    self.userIsInTheMiddleOfEnteringANumber = NO;
+    [self.brain clearOperands];
 }
 
 - (void)viewDidUnload {
