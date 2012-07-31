@@ -40,6 +40,14 @@
     
 }
 
+- (IBAction)pointPressed {
+    BOOL displayContainsPoint = [self.display.text rangeOfString:@"."].location != NSNotFound;
+    if (!displayContainsPoint) {
+        self.display.text = [self.display.text stringByAppendingString:@"."];
+        self.userIsInTheMiddleOfEnteringANumber = YES;
+    }
+}
+
 - (IBAction)enterPressed {
     [self.brain pushOperand:[self.display.text doubleValue]];
     self.userIsInTheMiddleOfEnteringANumber = NO;
