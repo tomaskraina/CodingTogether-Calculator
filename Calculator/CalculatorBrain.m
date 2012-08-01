@@ -23,6 +23,11 @@
     return _operandStack;
 }
 
+- (NSString *)description
+{
+    return self.operandStack.description;
+}
+
 - (void)pushOperand:(double)operand
 {
     NSNumber *operandObject = [NSNumber numberWithDouble:operand];
