@@ -28,6 +28,16 @@
     return [self.programStack copy];
 }
 
++ (NSSet *)supportedOperations
+{
+    static dispatch_once_t once;
+    static NSSet *_supportedOperations;
+    dispatch_once(&once, ^{
+        _supportedOperations = [[NSSet alloc] initWithObjects:@"+", @"-", @"*", @"/", @"sin", @"cos", @"log", @"π", @"e", @"+/-", nil];
+    });
+    return _supportedOperations;
+}
+
 - (NSString *)description
 {
     return self.programStack.description;
@@ -38,6 +48,10 @@
     [self.programStack addObject:[NSNumber numberWithDouble:operand]];
 }
 
+- (void)pushVariable:(NSString *)variable
+{
+    [self.programStack addObject:variable];
+}
 
 - (double)performOperation:(NSString *)operation
 {
