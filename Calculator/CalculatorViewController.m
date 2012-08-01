@@ -29,6 +29,11 @@
     return _brain;
 }
 
+- (void)removeEqualsSignFromHistoryDisplay
+{
+    self.historyDisplay.text = [self.historyDisplay.text stringByReplacingOccurrencesOfString:@"=" withString:@""];
+}
+
 - (IBAction)digitPressed:(UIButton *)sender {
     NSString *digit = [sender currentTitle];
     if (self.userIsInTheMiddleOfEnteringANumber) {
@@ -51,6 +56,7 @@
 
 - (IBAction)enterPressed {
     [self.brain pushOperand:[self.display.text doubleValue]];
+    [self removeEqualsSignFromHistoryDisplay];
     self.historyDisplay.text = [self.historyDisplay.text stringByAppendingFormat:@"%@ ", self.display.text];
     self.userIsInTheMiddleOfEnteringANumber = NO;
 }
@@ -61,19 +67,40 @@
     }
     NSString *operation = [sender currentTitle];
     double result = [self.brain performOperation:operation];
-    self.historyDisplay.text = [self.historyDisplay.text stringByAppendingFormat:@"%@ ", operation];
+    [self removeEqualsSignFromHistoryDisplay];
+    self.historyDisplay.text = [self.historyDisplay.text stringByAppendingFormat:@"%@ = ", operation];
     self.display.text = [NSString stringWithFormat:@"%g", result];
 }
 
-- (IBAction)clearPressed:(id)sender {
+- (IBAction)changeSignPressed:(UIButton *)sender {
+    if ([self.display.text isEqualToString:@"0"]) {
+        // changing a sign of zero isn't valid - do nothing
+        return;
+    }
+    
+    if (self.userIsInTheMiddleOfEnteringANumber) {
+        double valueWithChangedSign = [self.display.text doubleValue] * -1;
+        self.display.text = [NSString stringWithFormat:@"%g", valueWithChangedSign];
+    }
+    else {
+        [self operationPressed:sender];
+    }
+}
+
+- (IBAction)clearPressed {
     self.historyDisplay.text = @"";
     self.display.text = @"0";
     self.userIsInTheMiddleOfEnteringANumber = NO;
     [self.brain clearOperands];
 }
 
-- (void)viewDidUnload {
-    [self setHistoryDisplay:nil];
-    [super viewDidUnload];
+- (IBAction)backspacePressed {
+    int textLength = self.display.text.length;
+    self.display.text = [self.display.text substringToIndex:--textLength];
+    if (textLength == 0) {
+        self.display.text = @"0";
+        self.userIsInTheMiddleOfEnteringANumber = NO;
+    }
 }
+
 @end

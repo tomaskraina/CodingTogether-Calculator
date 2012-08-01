@@ -42,7 +42,6 @@
 {
     double result = 0;
     
-    // perform operations
     if ([operation isEqualToString:@"+"]) {
         result = [self popOperand] + [self popOperand];
     }
@@ -70,6 +69,15 @@
     }
     else if ([operation isEqualToString:@"π"]) {
         result = M_PI;
+    }
+    else if ([operation isEqualToString:@"e"]) {
+        result = M_E;
+    }
+    else if ([operation isEqualToString:@"log"]) {
+        result = log([self popOperand]);
+    }
+    else if ([operation isEqualToString:@"+/-"]) {
+        result = [self popOperand] * -1;
     }
     
     [self pushOperand:result];
