@@ -129,9 +129,36 @@
     return [self popOperandOffStack:stack];
 }
 
++ (double)runProgram:(id)program usingVariableValues:(NSDictionary *)variableValues
+{
+    // TODO: finish implementaion
+    return [CalculatorBrain runProgram:program];
+}
+
 - (void)clearOperands
 {
     [self.programStack removeAllObjects];
+}
+
++ (BOOL)isOperandVariable:(id)operand
+{
+    return [operand isKindOfClass:[NSString class]] && ![[CalculatorBrain supportedOperations] containsObject:operand];
+}
+
++ (NSSet *)variablesUsedInProgram:(id)program
+{
+    NSMutableSet *usedVariables = [[NSMutableSet alloc] init];
+    
+    if ([program isKindOfClass:[NSArray class]]) {
+        for (id object in program) {
+            // filter the variables
+            if ([CalculatorBrain isOperandVariable:object]) {
+                [usedVariables addObject:object];
+            }
+        }
+    }
+    
+    return [usedVariables count] ? [usedVariables copy] : nil;
 }
 
 @end
