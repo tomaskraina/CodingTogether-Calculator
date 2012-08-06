@@ -109,9 +109,12 @@
         }
         // TODO: more sophisticated addition of parenthesis, try to keep extraneous parentheses to a minimum.
     }
-    else {
+    else if ([topOfStack isKindOfClass:[NSNumber class]]) {
         description = [[topOfStack stringValue] mutableCopy];
         // TODO: print out multiple things on stack separated by commas
+    }
+    else {
+        description = [topOfStack mutableCopy];
     }
     
     return description;
@@ -200,13 +203,15 @@
 + (double)runProgram:(id)program usingVariableValues:(NSDictionary *)variableValues
 {
     // swap variables for given values or zeros
+    NSMutableArray *stack;
     if ([program isKindOfClass:[NSArray class]]) {
-        for (int i = 0; i < [program count]; i++) {
-            id operand = [program objectAtIndex:i];
+        stack = [program mutableCopy];
+        for (int i = 0; i < [stack count]; i++) {
+            id operand = [stack objectAtIndex:i];
             if ([[self class] isOperandVariable:operand]) {
                 BOOL isValueValid = [[variableValues objectForKey:operand] isKindOfClass:[NSNumber class]];
                 NSNumber *value = isValueValid ? [variableValues objectForKey:operand] : [NSNumber numberWithInt:0];
-                [program replaceObjectAtIndex:i withObject:value];
+                [stack replaceObjectAtIndex:i withObject:value];
             }
         }
     }
