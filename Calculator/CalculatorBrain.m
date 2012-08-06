@@ -82,6 +82,13 @@
     [self.programStack addObject:variable];
 }
 
+- (void)popLastItem
+{
+    if (self.programStack.count > 0) {
+        [self.programStack removeLastObject];
+    }
+}
+
 - (double)performOperation:(NSString *)operation
 {
     [self.programStack addObject:operation];

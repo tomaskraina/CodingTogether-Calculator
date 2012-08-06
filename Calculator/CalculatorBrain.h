@@ -22,5 +22,6 @@
 + (double)runProgram:(id)program usingVariableValues:(NSDictionary *)variableValues;
 + (NSString *)descriptionOfProgram:(id)program;
 + (NSSet *)variablesUsedInProgram:(id)program;
+- (void)popLastItem;
 
 @end

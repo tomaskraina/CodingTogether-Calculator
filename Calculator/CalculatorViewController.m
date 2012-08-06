@@ -69,6 +69,12 @@
     }
 }
 
+- (void)doCalculation {
+    self.historyDisplay.text = [NSString stringWithFormat:@"%@ =", [CalculatorBrain descriptionOfProgram:self.brain.program]];
+    double result = [CalculatorBrain runProgram:self.brain.program usingVariableValues:self.testVariableValues];
+    self.display.text = [NSString stringWithFormat:@"%g", result];
+}
+
 - (IBAction)enterPressed {
     [self.brain pushOperand:[self.display.text doubleValue]];
     [self removeEqualsSignFromHistoryDisplay];
@@ -82,9 +88,7 @@
     }
     NSString *operation = [sender currentTitle];
     [self.brain performOperation:operation];
-    self.historyDisplay.text = [NSString stringWithFormat:@"%@ =", [CalculatorBrain descriptionOfProgram:self.brain.program]];
-    double result = [CalculatorBrain runProgram:self.brain.program usingVariableValues:self.testVariableValues];
-    self.display.text = [NSString stringWithFormat:@"%g", result];
+    [self doCalculation];
 }
 
 - (IBAction)changeSignPressed:(UIButton *)sender {
@@ -110,11 +114,16 @@
 }
 
 - (IBAction)backspacePressed {
-    int textLength = self.display.text.length;
-    self.display.text = [self.display.text substringToIndex:--textLength];
-    if (textLength == 0) {
-        self.display.text = @"0";
-        self.userIsInTheMiddleOfEnteringANumber = NO;
+    if (self.userIsInTheMiddleOfEnteringANumber) {
+        int textLength = self.display.text.length;
+        self.display.text = [self.display.text substringToIndex:--textLength];
+        if (textLength == 0) {
+            self.display.text = @"0";
+            self.userIsInTheMiddleOfEnteringANumber = NO;
+        }
+    } else {
+        [self.brain popLastItem];
+        [self doCalculation];
     }
 }
 - (IBAction)variablePressed:(UIButton *)sender {
@@ -134,8 +143,7 @@
         self.testVariableValues = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:1], @"x", [NSNumber numberWithDouble:-.567], @"y", [NSNumber numberWithInt:56], @"z", nil];
     }
     
-    double result = [CalculatorBrain runProgram:self.brain.program usingVariableValues:self.testVariableValues];
-    self.display.text = [NSString stringWithFormat:@"%g", result];
+    [self doCalculation];
 }
 
 @end
