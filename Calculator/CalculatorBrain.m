@@ -129,20 +129,31 @@
     return [self popOperandOffStack:stack];
 }
 
++ (BOOL)isOperandVariable:(id)operand
+{
+    return [operand isKindOfClass:[NSString class]] && ![[CalculatorBrain supportedOperations] containsObject:operand];
+}
+
 + (double)runProgram:(id)program usingVariableValues:(NSDictionary *)variableValues
 {
-    // TODO: finish implementaion
+    // swap variables for given values or zeros
+    if ([program isKindOfClass:[NSArray class]]) {
+        for (int i = 0; i < [program count]; i++) {
+            id operand = [program objectAtIndex:i];
+            if ([[self class] isOperandVariable:operand]) {
+                BOOL isValueValid = [[variableValues objectForKey:operand] isKindOfClass:[NSNumber class]];
+                NSNumber *value = isValueValid ? [variableValues objectForKey:operand] : [NSNumber numberWithInt:0];
+                [program replaceObjectAtIndex:i withObject:value];
+            }
+        }
+    }
+    
     return [CalculatorBrain runProgram:program];
 }
 
 - (void)clearOperands
 {
     [self.programStack removeAllObjects];
-}
-
-+ (BOOL)isOperandVariable:(id)operand
-{
-    return [operand isKindOfClass:[NSString class]] && ![[CalculatorBrain supportedOperations] containsObject:operand];
 }
 
 + (NSSet *)variablesUsedInProgram:(id)program
