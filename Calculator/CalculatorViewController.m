@@ -57,7 +57,7 @@
 - (IBAction)enterPressed {
     [self.brain pushOperand:[self.display.text doubleValue]];
     [self removeEqualsSignFromHistoryDisplay];
-    self.historyDisplay.text = [self.historyDisplay.text stringByAppendingFormat:@"%@ ", self.display.text];
+    self.historyDisplay.text = [CalculatorBrain descriptionOfProgram:self.brain.program];
     self.userIsInTheMiddleOfEnteringANumber = NO;
 }
 
@@ -67,8 +67,7 @@
     }
     NSString *operation = [sender currentTitle];
     double result = [self.brain performOperation:operation];
-    [self removeEqualsSignFromHistoryDisplay];
-    self.historyDisplay.text = [self.historyDisplay.text stringByAppendingFormat:@"%@ = ", operation];
+    self.historyDisplay.text = [NSString stringWithFormat:@"%@ =", [CalculatorBrain descriptionOfProgram:self.brain.program]];
     self.display.text = [NSString stringWithFormat:@"%g", result];
 }
 
@@ -101,6 +100,14 @@
         self.display.text = @"0";
         self.userIsInTheMiddleOfEnteringANumber = NO;
     }
+}
+- (IBAction)variablePressed:(UIButton *)sender {
+    if (self.userIsInTheMiddleOfEnteringANumber) {
+        [self enterPressed];
+    }
+    
+    [self.brain pushVariable:[sender currentTitle]];
+    self.display.text = [sender currentTitle];
 }
 
 @end
