@@ -19,6 +19,8 @@
 @synthesize historyDisplay = _historyDisplay;
 @synthesize userIsInTheMiddleOfEnteringANumber = _userIsInTheMiddleOfEnteringANumber;
 @synthesize brain = _brain;
+@synthesize testVariableValues = _testVariableValues;
+@synthesize variablesDisplay = _variablesDisplay;
 
 
 - (CalculatorBrain *)brain
@@ -27,6 +29,19 @@
         _brain = [[CalculatorBrain alloc] init];
     }
     return _brain;
+}
+
+- (void)setTestVariableValues:(NSDictionary *)testVariableValues
+{
+    _testVariableValues = testVariableValues;
+    
+    // update variablesDisplay
+    NSMutableString *text = [[NSMutableString alloc] init];
+    for (NSString *variable in self.testVariableValues) {
+        [text appendFormat:@"%@ = %g, ", variable, [[self.testVariableValues objectForKey:variable] doubleValue]];
+    }
+    
+    self.variablesDisplay.text = [text stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@", "]];
 }
 
 - (void)removeEqualsSignFromHistoryDisplay
@@ -66,8 +81,9 @@
         [self enterPressed];
     }
     NSString *operation = [sender currentTitle];
-    double result = [self.brain performOperation:operation];
+    [self.brain performOperation:operation];
     self.historyDisplay.text = [NSString stringWithFormat:@"%@ =", [CalculatorBrain descriptionOfProgram:self.brain.program]];
+    double result = [CalculatorBrain runProgram:self.brain.program usingVariableValues:self.testVariableValues];
     self.display.text = [NSString stringWithFormat:@"%g", result];
 }
 
@@ -108,6 +124,18 @@
     
     [self.brain pushVariable:[sender currentTitle]];
     self.display.text = [sender currentTitle];
+}
+
+- (IBAction)testCasePressed:(UIButton *)sender {
+    if ([[sender currentTitle] isEqualToString:@"T1"]) {
+        self.testVariableValues = nil;
+    }
+    else if ([[sender currentTitle] isEqualToString:@"T2"]) {
+        self.testVariableValues = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:1], @"x", [NSNumber numberWithDouble:-.567], @"y", [NSNumber numberWithInt:56], @"z", nil];
+    }
+    
+    double result = [CalculatorBrain runProgram:self.brain.program usingVariableValues:self.testVariableValues];
+    self.display.text = [NSString stringWithFormat:@"%g", result];
 }
 
 @end
