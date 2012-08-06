@@ -209,14 +209,14 @@
         for (int i = 0; i < [stack count]; i++) {
             id operand = [stack objectAtIndex:i];
             if ([[self class] isOperandVariable:operand]) {
-                BOOL isValueValid = [[variableValues objectForKey:operand] isKindOfClass:[NSNumber class]];
-                NSNumber *value = isValueValid ? [variableValues objectForKey:operand] : [NSNumber numberWithInt:0];
+                BOOL isValueForVariableAvailable = [[variableValues objectForKey:operand] isKindOfClass:[NSNumber class]];
+                NSNumber *value = isValueForVariableAvailable ? [variableValues objectForKey:operand] : [NSNumber numberWithInt:0];
                 [stack replaceObjectAtIndex:i withObject:value];
             }
         }
     }
     
-    return [CalculatorBrain runProgram:program];
+    return [CalculatorBrain runProgram:stack];
 }
 
 - (void)clearOperands
