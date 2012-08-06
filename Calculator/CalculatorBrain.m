@@ -28,14 +28,43 @@
     return [self.programStack copy];
 }
 
-+ (NSSet *)supportedOperations
++ (NSSet *)twoOperandOperations
 {
     static dispatch_once_t once;
     static NSSet *_supportedOperations;
     dispatch_once(&once, ^{
-        _supportedOperations = [[NSSet alloc] initWithObjects:@"+", @"-", @"*", @"/", @"sin", @"cos", @"log", @"π", @"e", @"+/-", nil];
+        _supportedOperations = [[NSSet alloc] initWithObjects:@"+", @"-", @"*", @"/", nil];
     });
     return _supportedOperations;
+}
+
++ (NSSet *)oneOperandOperations
+{
+    static dispatch_once_t once;
+    static NSSet *_supportedOperations;
+    dispatch_once(&once, ^{
+        _supportedOperations = [[NSSet alloc] initWithObjects:@"sin", @"cos", @"log", @"sqrt", @"+/-", nil];
+    });
+    return _supportedOperations;
+}
+
++ (NSSet *)noOperandOperations
+{
+    static dispatch_once_t once;
+    static NSSet *_supportedOperations;
+    dispatch_once(&once, ^{
+        _supportedOperations = [[NSSet alloc] initWithObjects:@"π", @"e", nil];
+    });
+    return _supportedOperations;
+}
+
++ (NSSet *)supportedOperations
+{
+    NSSet *supportedOperations = [[self class] noOperandOperations];
+    supportedOperations = [supportedOperations setByAddingObjectsFromSet:[[self class] oneOperandOperations]];
+    supportedOperations = [supportedOperations setByAddingObjectsFromSet:[[self class] twoOperandOperations]];
+    
+    return supportedOperations;
 }
 
 - (NSString *)description
@@ -59,9 +88,43 @@
     return [CalculatorBrain runProgram:self.program];
 }
 
++ (NSMutableString *)descriptionOfTopOfStack:(NSMutableArray *)stack
+{
+    NSMutableString *description;
+    
+    id topOfStack = [stack lastObject];
+    if (topOfStack) {
+        [stack removeLastObject];
+    }
+    
+    // the top of stack can be: NSNumber or NSString: variable, symbol, function or operation
+    if ([[self oneOperandOperations] containsObject:topOfStack]) {
+        description = [NSString stringWithFormat:@"%@(%@)", topOfStack, [self descriptionOfTopOfStack:stack]];
+    }
+    else if ([[self twoOperandOperations] containsObject:topOfStack]) {
+        id operand = [self descriptionOfTopOfStack:stack];
+        description = [NSString stringWithFormat:@"%@ %@ %@", [self descriptionOfTopOfStack:stack], topOfStack, operand];
+        if (stack.count > 0) {
+            description = [NSString stringWithFormat:@"(%@)", description];
+        }
+        // TODO: more sophisticated addition of parenthesis, try to keep extraneous parentheses to a minimum.
+    }
+    else {
+        description = [[topOfStack stringValue] mutableCopy];
+        // TODO: print out multiple things on stack separated by commas
+    }
+    
+    return description;
+}
+
 + (NSString *)descriptionOfProgram:(id)program
 {
-    return @"6+3";
+    NSMutableArray *stack;
+    if ([program isKindOfClass:[NSArray class]]) {
+        stack = [program mutableCopy];
+    }
+    
+    return [self descriptionOfTopOfStack:stack];
 }
 
 + (double)popOperandOffStack:(NSMutableArray *)stack
