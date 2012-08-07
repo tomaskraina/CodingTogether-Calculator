@@ -67,6 +67,19 @@
     return supportedOperations;
 }
 
++ (NSSet *)associativeOperations
+{
+    // Associative operations we support are addition and multiplication
+    // http://en.wikipedia.org/wiki/Associative_property
+    
+    static dispatch_once_t once;
+    static NSSet *_associativeOperations;
+    dispatch_once(&once, ^{
+        _associativeOperations = [[NSSet alloc] initWithObjects:@"+", @"*", nil];
+    });
+    return _associativeOperations;
+}
+
 - (NSString *)description
 {
     return self.programStack.description;
@@ -95,9 +108,9 @@
     return [CalculatorBrain runProgram:self.program];
 }
 
-+ (NSMutableString *)descriptionOfTopOfStack:(NSMutableArray *)stack
++ (NSString *)descriptionOfTopOfStack:(NSMutableArray *)stack withParentOperation:(NSString *)parentOperation
 {
-    NSMutableString *description;
+    NSString *description;
     
     id topOfStack = [stack lastObject];
     if (topOfStack) {
@@ -106,22 +119,20 @@
     
     // the top of stack can be: NSNumber or NSString: variable, symbol, function or operation
     if ([[self oneOperandOperations] containsObject:topOfStack]) {
-        description = [NSString stringWithFormat:@"%@(%@)", topOfStack, [self descriptionOfTopOfStack:stack]];
+        description = [NSString stringWithFormat:@"%@(%@)", topOfStack, [self descriptionOfTopOfStack:stack withParentOperation:topOfStack]];
     }
     else if ([[self twoOperandOperations] containsObject:topOfStack]) {
-        id operand = [self descriptionOfTopOfStack:stack];
-        description = [NSString stringWithFormat:@"%@ %@ %@", [self descriptionOfTopOfStack:stack], topOfStack, operand];
-        if (stack.count > 0) {
+        id operand = [self descriptionOfTopOfStack:stack withParentOperation:topOfStack];
+        description = [NSString stringWithFormat:@"%@ %@ %@", [self descriptionOfTopOfStack:stack withParentOperation:topOfStack], topOfStack, operand];
+        // try to suppress reduntant parenthesis
+        // add parenthesis around an expression only if it isn't neither the last expression nor associative expression with the parent's one
+        // it doesn't support implicit order of operations
+        if (stack.count > 0 && !([parentOperation isEqualToString:topOfStack] && [[self associativeOperations] containsObject:topOfStack])) {
             description = [NSString stringWithFormat:@"(%@)", description];
         }
-        // TODO: more sophisticated addition of parenthesis, try to keep extraneous parentheses to a minimum.
-    }
-    else if ([topOfStack isKindOfClass:[NSNumber class]]) {
-        description = [[topOfStack stringValue] mutableCopy];
-        // TODO: print out multiple things on stack separated by commas
     }
     else {
-        description = [topOfStack mutableCopy];
+        description = [topOfStack description];
     }
     
     return description;
@@ -134,7 +145,15 @@
         stack = [program mutableCopy];
     }
     
-    return [self descriptionOfTopOfStack:stack];
+    // descriptionOfTopOfStack:withParentOperation: works recursively but ignores elements on stack those no operation is applied
+    // therefore, we must find those elements and separate them with commas
+    NSMutableArray *elements = [[NSMutableArray alloc] init];
+    while (stack.count) {
+        [elements addObject:[self descriptionOfTopOfStack:stack withParentOperation:nil]];
+    }
+    
+    // the array of elements must be reversed to represent the order they were entered
+    return [[[elements reverseObjectEnumerator] allObjects] componentsJoinedByString:@", "];
 }
 
 + (double)popOperandOffStack:(NSMutableArray *)stack
