@@ -71,8 +71,8 @@
 
 - (void)doCalculation {
     self.historyDisplay.text = [NSString stringWithFormat:@"%@ =", [CalculatorBrain descriptionOfProgram:self.brain.program]];
-    double result = [CalculatorBrain runProgram:self.brain.program usingVariableValues:self.testVariableValues];
-    self.display.text = [NSString stringWithFormat:@"%g", result];
+    id result = [CalculatorBrain runProgram:self.brain.program usingVariableValues:self.testVariableValues];
+    self.display.text = [result description];
 }
 
 - (IBAction)enterPressed {

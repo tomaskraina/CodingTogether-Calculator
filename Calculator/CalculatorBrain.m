@@ -102,7 +102,7 @@
     }
 }
 
-- (double)performOperation:(NSString *)operation
+- (id)performOperation:(NSString *)operation
 {
     [self.programStack addObject:operation];
     return [CalculatorBrain runProgram:self.program];
@@ -156,7 +156,7 @@
     return [[[elements reverseObjectEnumerator] allObjects] componentsJoinedByString:@", "];
 }
 
-+ (double)popOperandOffStack:(NSMutableArray *)stack
++ (NSNumber *)popOperandOffStack:(NSMutableArray *)stack error:(NSError **)error
 {
     double result = 0;
 
@@ -171,29 +171,40 @@
     else if ([topOfStack isKindOfClass:[NSString class]]) {
         NSString *operation = topOfStack;
         if ([operation isEqualToString:@"+"]) {
-            result = [self popOperandOffStack:stack] + [self popOperandOffStack:stack];
+            result = [[self popOperandOffStack:stack error:error] doubleValue] + [[self popOperandOffStack:stack error:error] doubleValue];
         }
         else if ([operation isEqualToString:@"*"]) {
-            result = [self popOperandOffStack:stack] * [self popOperandOffStack:stack];
+            result = [[self popOperandOffStack:stack error:error] doubleValue] * [[self popOperandOffStack:stack error:error] doubleValue];
         }
         else if ([operation isEqualToString:@"-"]) {
-            double subtrahend = [self popOperandOffStack:stack];
-            result = [self popOperandOffStack:stack] - subtrahend;
+            double subtrahend = [[self popOperandOffStack:stack error:error] doubleValue];
+            result = [[self popOperandOffStack:stack error:error] doubleValue] - subtrahend;
         }
         else if ([operation isEqualToString:@"/"]) {
-            double divisor = [self popOperandOffStack:stack];
+            double divisor = [[self popOperandOffStack:stack error:error] doubleValue];
             if (divisor) {
-                result = [self popOperandOffStack:stack] / divisor;
+                result = [[self popOperandOffStack:stack error:error] doubleValue] / divisor;
+            }
+            else {
+                NSDictionary *description = [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Division by zero", @"Division by zero"), NSLocalizedDescriptionKey, nil];
+                *error = [NSError errorWithDomain:@"CalculatorBrain" code:CalculatorBrainErrorCodeDivisionByZero userInfo:description];
             }
         }
         else if ([operation isEqualToString:@"sin"]) {
-            result = sin([self popOperandOffStack:stack]);
+            result = sin([[self popOperandOffStack:stack error:error] doubleValue]);
         }
         else if ([operation isEqualToString:@"cos"]) {
-            result = cos([self popOperandOffStack:stack]);
+            result = cos([[self popOperandOffStack:stack error:error] doubleValue]);
         }
         else if ([operation isEqualToString:@"sqrt"]) {
-            result = sqrt([self popOperandOffStack:stack]);
+            double operand = [[self popOperandOffStack:stack error:error] doubleValue];
+            if (operand >= 0) {
+                result = sqrt(operand);
+            }
+            else {
+                NSDictionary *description = [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Square root of negative number", @"Square root of a negative number"), NSLocalizedDescriptionKey, nil];
+                *error = [NSError errorWithDomain:@"CalculatorBrain" code:CalculatorBrainErrorCodeSquareRootOfANegativeNumber userInfo:description];
+            }
         }
         else if ([operation isEqualToString:@"π"]) {
             result = M_PI;
@@ -202,14 +213,14 @@
             result = M_E;
         }
         else if ([operation isEqualToString:@"log"]) {
-            result = log([self popOperandOffStack:stack]);
+            result = log([[self popOperandOffStack:stack error:error] doubleValue]);
         }
         else if ([operation isEqualToString:@"+/-"]) {
-            result = [self popOperandOffStack:stack] * -1;
+            result = [[self popOperandOffStack:stack error:error] doubleValue] * -1;
         }
     }
     
-    return result;
+    return [NSNumber numberWithDouble:result];
 }
 
 + (BOOL)isOperandVariable:(id)operand
@@ -217,7 +228,7 @@
     return [operand isKindOfClass:[NSString class]] && ![[CalculatorBrain supportedOperations] containsObject:operand];
 }
 
-+ (double)runProgram:(id)program
++ (id)runProgram:(id)program
 {
     NSMutableArray *stack;
     if ([program isKindOfClass:[NSArray class]]) {
@@ -230,10 +241,19 @@
             [stack replaceObjectAtIndex:[stack indexOfObject:element] withObject:[NSNumber numberWithInt:0]];
         }
     }
-    return [self popOperandOffStack:stack];
+    
+    // Using NSError because it's cleaner way how to deal with errors
+    NSError *error;
+    id result = [self popOperandOffStack:stack error:&error];
+    // Hypothetically, it can happen that the result is 0.0 thus error.code must be tested as well
+    if ([result doubleValue] == 0.0 && error.code != CalculatorBrainErrorCodeNoError) {
+        result = error.localizedDescription;
+    }
+    
+    return result;
 }
 
-+ (double)runProgram:(id)program usingVariableValues:(NSDictionary *)variableValues
++ (id)runProgram:(id)program usingVariableValues:(NSDictionary *)variableValues
 {
     // try to swap all variables for given values
     NSMutableArray *stack;
