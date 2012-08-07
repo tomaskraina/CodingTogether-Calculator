@@ -212,31 +212,38 @@
     return result;
 }
 
++ (BOOL)isOperandVariable:(id)operand
+{
+    return [operand isKindOfClass:[NSString class]] && ![[CalculatorBrain supportedOperations] containsObject:operand];
+}
+
 + (double)runProgram:(id)program
 {
     NSMutableArray *stack;
     if ([program isKindOfClass:[NSArray class]]) {
         stack = [program mutableCopy];
     }
+    
+    // Swap all variables for zeros
+    for (id element in stack) {
+        if ([self isOperandVariable:element]) {
+            [stack replaceObjectAtIndex:[stack indexOfObject:element] withObject:[NSNumber numberWithInt:0]];
+        }
+    }
     return [self popOperandOffStack:stack];
-}
-
-+ (BOOL)isOperandVariable:(id)operand
-{
-    return [operand isKindOfClass:[NSString class]] && ![[CalculatorBrain supportedOperations] containsObject:operand];
 }
 
 + (double)runProgram:(id)program usingVariableValues:(NSDictionary *)variableValues
 {
-    // swap variables for given values or zeros
+    // try to swap all variables for given values
     NSMutableArray *stack;
     if ([program isKindOfClass:[NSArray class]]) {
         stack = [program mutableCopy];
         for (int i = 0; i < [stack count]; i++) {
             id operand = [stack objectAtIndex:i];
-            if ([[self class] isOperandVariable:operand]) {
-                BOOL isValueForVariableAvailable = [[variableValues objectForKey:operand] isKindOfClass:[NSNumber class]];
-                NSNumber *value = isValueForVariableAvailable ? [variableValues objectForKey:operand] : [NSNumber numberWithInt:0];
+            // replace only if there's a valid value for that particular variable
+            if ([[self class] isOperandVariable:operand] && [[variableValues objectForKey:operand] isKindOfClass:[NSNumber class]]) {
+                NSNumber *value = [variableValues objectForKey:operand];
                 [stack replaceObjectAtIndex:i withObject:value];
             }
         }
