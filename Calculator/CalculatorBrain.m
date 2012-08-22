@@ -236,9 +236,10 @@
     }
     
     // Swap all variables for zeros
-    for (id element in stack) {
+    for (int i = 0; i < stack.count; i++) {
+        id element = [stack objectAtIndex:i];
         if ([self isOperandVariable:element]) {
-            [stack replaceObjectAtIndex:[stack indexOfObject:element] withObject:[NSNumber numberWithInt:0]];
+            [stack replaceObjectAtIndex:i withObject:[NSNumber numberWithInt:0]];
         }
     }
     
