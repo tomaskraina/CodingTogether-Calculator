@@ -15,8 +15,9 @@
 @end
 
 @implementation GraphViewController
-@synthesize descriptionLabel;
-@synthesize graphView;
+@synthesize descriptionLabel = _descriptionLabel;
+@synthesize graphView = _graphView;
+@synthesize program = _program;
 
 
 - (void)didReceiveMemoryWarning

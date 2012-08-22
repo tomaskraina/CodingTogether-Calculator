@@ -10,4 +10,6 @@
 
 @interface GraphViewController : UIViewController
 
+@property(strong, nonatomic) id program; // this is Model 
+
 @end
