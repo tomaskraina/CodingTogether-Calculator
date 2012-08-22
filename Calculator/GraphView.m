@@ -9,6 +9,9 @@
 #import "GraphView.h"
 
 @implementation GraphView
+@synthesize datasource = _datasource;
+@synthesize origin = _origin;
+@synthesize scale = _scale;
 
 - (id)initWithFrame:(CGRect)frame
 {
