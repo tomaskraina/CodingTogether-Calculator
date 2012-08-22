@@ -8,6 +8,7 @@
 
 #import "GraphViewController.h"
 #import "GraphView.h"
+#import "CalculatorBrain.h"
 
 @interface GraphViewController() <UIScrollViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
@@ -38,6 +39,14 @@
 }
 */
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    // show description of program
+    self.descriptionLabel.text = [CalculatorBrain descriptionOfProgram:self.program];
+}
+
 - (void)viewDidUnload
 {
     [super viewDidUnload];
@@ -51,7 +60,5 @@
     // Return YES for supported orientations
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
-
-#pragma mark - UIScrollViewDelegate
 
 @end

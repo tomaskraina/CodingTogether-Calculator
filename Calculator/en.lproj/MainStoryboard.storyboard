@@ -423,7 +423,7 @@
                     <navigationItem key="navigationItem" id="8aH-H4-ia5">
                         <barButtonItem key="rightBarButtonItem" title="Graph" id="lJu-wQ-baF">
                             <connections>
-                                <segue destination="Yjo-g4-bEz" kind="push" id="lD2-0U-MdI"/>
+                                <segue destination="Yjo-g4-bEz" kind="push" identifier="Show Graph" id="lD2-0U-MdI"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>

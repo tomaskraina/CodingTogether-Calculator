@@ -8,6 +8,7 @@
 
 #import "CalculatorViewController.h"
 #import "CalculatorBrain.h"
+#import "GraphViewController.h"
 
 @interface CalculatorViewController ()
 @property (nonatomic) BOOL userIsInTheMiddleOfEnteringANumber;
@@ -144,6 +145,16 @@
     }
     
     [self doCalculation];
+}
+
+#pragma mark - UIStoryboard & UIStoryboardSegue
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"Show Graph"]) {
+        GraphViewController *graphViewController = (GraphViewController *)segue.destinationViewController;
+        graphViewController.program = self.brain.program;
+    }
 }
 
 @end
