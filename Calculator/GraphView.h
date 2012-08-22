@@ -10,6 +10,7 @@
 
 @class GraphView;
 @protocol GraphViewDataSource <NSObject>
+// Returns nil for invalid x-values
 - (NSInteger *)graphView:(GraphView *)graphView yAxisValueForXAxisValue:(NSInteger *)xAxisValue;
 @end
 
