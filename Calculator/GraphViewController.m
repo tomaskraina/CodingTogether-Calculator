@@ -35,7 +35,7 @@
     [super viewDidLoad];
     
     self.graphView.datasource = self;
-    self.graphView.scale = 1.0;
+    self.graphView.scale = 10;
 }
 
 
@@ -65,7 +65,7 @@
 
 - (NSNumber *)graphView:(GraphView *)graphView yAxisValueForXAxisValue:(NSNumber *)xValue
 {    
-    NSDictionary *variableValues = [NSDictionary dictionaryWithObject:xValue forKey:@"X"];
+    NSDictionary *variableValues = [NSDictionary dictionaryWithObject:xValue forKey:@"x"];
     NSNumber *yValue = [CalculatorBrain runProgram:self.program usingVariableValues:variableValues];
     return yValue;
 }

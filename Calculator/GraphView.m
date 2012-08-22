@@ -44,12 +44,59 @@
     return _scale;
 }
 
+- (CGPoint)pointInViewForPointInGraph:(CGPoint)point
+{
+    CGPoint pointInView = CGPointZero;
+    pointInView.x = (point.x * self.scale) + self.origin.x;
+    pointInView.y = self.origin.y - (point.y * self.scale);
+    
+    return pointInView;
+}
+
+- (CGPoint)pointInGraphForPointInView:(CGPoint)point
+{
+    CGPoint pointInGraph = CGPointZero;
+    pointInGraph.x = (point.x - self.origin.x) / self.scale;
+    pointInGraph.y = (self.origin.y - point.y) / self.scale;
+
+    return pointInGraph;
+}
+
+- (void)drawGraphInContext:(CGContextRef)context
+{
+    UIGraphicsPushContext(context);
+    
+    CGContextBeginPath(context);
+    NSInteger minX = [self pointInGraphForPointInView:CGPointZero].x;
+    NSInteger maxX = [self pointInGraphForPointInView:CGPointMake(self.bounds.size.width, 0)].x;
+    
+    NSValue *previousYValue;
+    for (CGFloat xValue = minX; xValue < maxX; xValue++) {
+        NSNumber *yValue = [self.datasource graphView:self yAxisValueForXAxisValue:[NSNumber numberWithFloat:xValue]];
+        CGPoint pointInView = [self pointInViewForPointInGraph:CGPointMake(xValue, [yValue doubleValue])];
+        if (!previousYValue) {
+            CGContextMoveToPoint(context, pointInView.x, pointInView.y);
+        }
+        else if (yValue) {
+            CGContextAddLineToPoint(context, pointInView.x, pointInView.y);
+        }
+        
+        previousYValue = yValue;
+    }
+    CGContextStrokePath(context);
+
+    
+    UIGraphicsPopContext();
+}
+
 - (void)drawRect:(CGRect)rect
 {
-    // Drawing code
-    
     // Draw the axis
     [AxesDrawer drawAxesInRect:rect originAtPoint:self.origin scale:self.scale];
+    
+    // Draw the graph
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    [self drawGraphInContext:context];
 }
 
 
