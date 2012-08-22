@@ -443,6 +443,11 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" id="5OM-qI-V8c" customClass="GraphView">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="367"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" minimumFontSize="10" id="sd5-K9-7Fd">
                                 <rect key="frame" x="20" y="375" width="280" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -450,20 +455,13 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="wQU-Z2-d33" customClass="GraphView">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="367"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <connections>
-                                    <outlet property="delegate" destination="Yjo-g4-bEz" id="eGp-JG-Yoz"/>
-                                </connections>
-                            </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="Fvc-0o-Ro1"/>
                     <connections>
                         <outlet property="descriptionLabel" destination="sd5-K9-7Fd" id="hTy-yy-Yf7"/>
-                        <outlet property="graphView" destination="wQU-Z2-d33" id="EIh-Cb-HML"/>
+                        <outlet property="graphView" destination="5OM-qI-V8c" id="Dxk-6T-g9j"/>
                     </connections>
                 </viewController>
             </objects>
@@ -496,7 +494,7 @@
                 <relationship kind="outlet" name="variablesDisplay" candidateClass="UILabel"/>
             </relationships>
         </class>
-        <class className="GraphView" superclassName="UIScrollView">
+        <class className="GraphView" superclassName="UIView">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/GraphView.h"/>
         </class>
         <class className="GraphViewController" superclassName="UIViewController">

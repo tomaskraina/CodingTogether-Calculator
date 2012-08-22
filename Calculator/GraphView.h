@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface GraphView : UIScrollView
+@interface GraphView : UIView
 
 @end

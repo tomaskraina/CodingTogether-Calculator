@@ -62,8 +62,8 @@
 		2C50566D15E4EE31006240AB /* Graph MVC */ = {
 			isa = PBXGroup;
 			children = (
-				2C50566F15E4EE6F006240AB /* AxesDrawer.m */,
 				2C50567015E4EE6F006240AB /* AxesDrawer.h */,
+				2C50566F15E4EE6F006240AB /* AxesDrawer.m */,
 				2C4920A315DD669900ABF0D9 /* GraphViewController.h */,
 				2C4920A415DD669900ABF0D9 /* GraphViewController.m */,
 				2C4920A715DD686900ABF0D9 /* GraphView.h */,
