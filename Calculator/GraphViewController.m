@@ -30,13 +30,14 @@
 
 #pragma mark - View lifecycle
 
-/*
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.graphView.datasource = self;
+    self.graphView.scale = 1.0;
 }
-*/
+
 
 - (void)viewWillAppear:(BOOL)animated
 {

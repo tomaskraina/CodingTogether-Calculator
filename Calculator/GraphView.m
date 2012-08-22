@@ -7,6 +7,10 @@
 //
 
 #import "GraphView.h"
+#import "AxesDrawer.h"
+
+#define DEFAULT_ORIGIN_MARGIN 20.0
+#define DEFAULT_SCALE 1.0
 
 @implementation GraphView
 @synthesize datasource = _datasource;
@@ -22,13 +26,31 @@
     return self;
 }
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
+- (CGPoint)origin
+{
+    if (CGPointEqualToPoint(_origin, CGPointZero)) {
+        _origin = CGPointMake(DEFAULT_ORIGIN_MARGIN, self.bounds.size.height - DEFAULT_ORIGIN_MARGIN);
+    }
+    
+    return _origin;
+}
+
+- (CGFloat)scale
+{
+    if (_scale == 0) {
+        _scale = DEFAULT_SCALE;
+    }
+    
+    return _scale;
+}
+
 - (void)drawRect:(CGRect)rect
 {
     // Drawing code
+    
+    // Draw the axis
+    [AxesDrawer drawAxesInRect:rect originAtPoint:self.origin scale:self.scale];
 }
-*/
+
 
 @end
