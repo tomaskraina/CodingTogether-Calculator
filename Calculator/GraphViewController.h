@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GraphView.h"
 
-@interface GraphViewController : UIViewController
+@interface GraphViewController : UIViewController <GraphViewDataSource>
 
 @property(strong, nonatomic) id program; // this is Model 
 

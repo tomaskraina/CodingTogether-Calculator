@@ -7,7 +7,6 @@
 //
 
 #import "GraphViewController.h"
-#import "GraphView.h"
 #import "CalculatorBrain.h"
 
 @interface GraphViewController() <UIScrollViewDelegate>
@@ -59,6 +58,15 @@
 {
     // Return YES for supported orientations
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+#pragma mark - GraphViewDataSource
+
+- (NSNumber *)graphView:(GraphView *)graphView yAxisValueForXAxisValue:(NSNumber *)xValue
+{    
+    NSDictionary *variableValues = [NSDictionary dictionaryWithObject:xValue forKey:@"X"];
+    NSNumber *yValue = [CalculatorBrain runProgram:self.program usingVariableValues:variableValues];
+    return yValue;
 }
 
 @end
