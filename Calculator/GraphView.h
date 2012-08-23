@@ -18,4 +18,7 @@
 @property(weak, nonatomic) id<GraphViewDataSource> datasource;
 @property(nonatomic) CGPoint origin;
 @property(nonatomic) CGFloat scale;
+
+- (void)pinch:(UIPinchGestureRecognizer *)gestureRecognizer;
+
 @end

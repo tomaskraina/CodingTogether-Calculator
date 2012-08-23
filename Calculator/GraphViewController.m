@@ -9,7 +9,7 @@
 #import "GraphViewController.h"
 #import "CalculatorBrain.h"
 
-@interface GraphViewController() <UIScrollViewDelegate>
+@interface GraphViewController()
 @property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
 @property (weak, nonatomic) IBOutlet GraphView *graphView;
 @end
@@ -26,6 +26,14 @@
     [super didReceiveMemoryWarning];
     
     // Release any cached data, images, etc that aren't in use.
+}
+
+- (void)setGraphView:(GraphView *)graphView
+{
+    _graphView = graphView;
+    
+    UIPinchGestureRecognizer *pinchRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:graphView action:@selector(pinch:)];
+    [graphView addGestureRecognizer:pinchRecognizer];
 }
 
 #pragma mark - View lifecycle

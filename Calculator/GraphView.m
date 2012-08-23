@@ -116,5 +116,14 @@
     [self drawGraphInContext:context];
 }
 
+#pragma mark - UIGestureRecognizer
+
+- (void)pinch:(UIPinchGestureRecognizer *)gestureRecognizer;
+{    
+    if (gestureRecognizer.state == UIGestureRecognizerStateEnded || gestureRecognizer.state == UIGestureRecognizerStateChanged) {
+        self.scale *= gestureRecognizer.scale;
+        gestureRecognizer.scale = 1;
+    }
+}
 
 @end
