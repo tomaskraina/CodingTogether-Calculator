@@ -56,7 +56,9 @@
     [super viewDidLoad];
     
     self.graphView.datasource = self;
-    self.graphView.scale = 10;
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    self.graphView.scale = [defaults doubleForKey:[NSString stringWithFormat:@"GraphView%i.scale", self.graphView.tag]];
+    self.graphView.origin = CGPointMake([defaults doubleForKey:[NSString stringWithFormat:@"GraphView%i.origin.x", self.graphView.tag]], [defaults doubleForKey:[NSString stringWithFormat:@"GraphView%i.origin.y", self.graphView.tag]]);
 }
 
 
@@ -66,6 +68,15 @@
     
     // show description of program
     self.descriptionLabel.text = [NSString stringWithFormat:@"y = %@", [CalculatorBrain descriptionOfProgram:self.program]];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    // save view's scale and origin to NSUserDefaults
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setDouble:self.graphView.scale forKey:[NSString stringWithFormat:@"GraphView%i.scale", self.graphView.tag]];
+    [defaults setDouble:self.graphView.origin.x forKey:[NSString stringWithFormat:@"GraphView%i.origin.x", self.graphView.tag]];
+    [defaults setDouble:self.graphView.origin.y forKey:[NSString stringWithFormat:@"GraphView%i.origin.y", self.graphView.tag]];
 }
 
 - (void)viewDidUnload
