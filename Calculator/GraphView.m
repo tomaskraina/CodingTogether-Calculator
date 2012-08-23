@@ -84,7 +84,7 @@
     
     CGContextBeginPath(context);
     NSInteger minViewX = 0;
-    NSInteger maxViewX = self.bounds.size.width;
+    NSInteger maxViewX = self.bounds.size.width * self.contentScaleFactor;
     
     NSValue *previousYValue;
     for (CGFloat viewX = minViewX; viewX < maxViewX; viewX++) {
@@ -92,10 +92,10 @@
         NSNumber *yValue = [self.datasource graphView:self yAxisValueForXAxisValue:[NSNumber numberWithDouble:xValue]];
         CGPoint pointInView = [self pointInViewForPointInGraph:CGPointMake(xValue, [yValue doubleValue])];
         if (!previousYValue) {
-            CGContextMoveToPoint(context, pointInView.x, pointInView.y);
+            CGContextMoveToPoint(context, pointInView.x / self.contentScaleFactor, pointInView.y / self.contentScaleFactor);
         }
         else if (yValue) {
-            CGContextAddLineToPoint(context, pointInView.x, pointInView.y);
+            CGContextAddLineToPoint(context, pointInView.x / self.contentScaleFactor, pointInView.y / self.contentScaleFactor);
         }
         
         previousYValue = yValue;
