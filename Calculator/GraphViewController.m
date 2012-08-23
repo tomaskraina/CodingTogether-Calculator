@@ -28,6 +28,12 @@
     // Release any cached data, images, etc that aren't in use.
 }
 
+- (void)setProgram:(id)program
+{
+    _program = program;
+    [self.graphView setNeedsDisplay];
+}
+
 - (void)setGraphView:(GraphView *)graphView
 {
     _graphView = graphView;
