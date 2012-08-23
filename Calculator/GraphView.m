@@ -67,12 +67,13 @@
     UIGraphicsPushContext(context);
     
     CGContextBeginPath(context);
-    NSInteger minX = [self pointInGraphForPointInView:CGPointZero].x;
-    NSInteger maxX = [self pointInGraphForPointInView:CGPointMake(self.bounds.size.width, 0)].x;
+    NSInteger minViewX = 0;
+    NSInteger maxViewX = self.bounds.size.width;
     
     NSValue *previousYValue;
-    for (CGFloat xValue = minX; xValue < maxX; xValue++) {
-        NSNumber *yValue = [self.datasource graphView:self yAxisValueForXAxisValue:[NSNumber numberWithFloat:xValue]];
+    for (CGFloat viewX = minViewX; viewX < maxViewX; viewX++) {
+        double xValue = [self pointInGraphForPointInView:CGPointMake(viewX, 0)].x;
+        NSNumber *yValue = [self.datasource graphView:self yAxisValueForXAxisValue:[NSNumber numberWithDouble:xValue]];
         CGPoint pointInView = [self pointInViewForPointInGraph:CGPointMake(xValue, [yValue doubleValue])];
         if (!previousYValue) {
             CGContextMoveToPoint(context, pointInView.x, pointInView.y);
