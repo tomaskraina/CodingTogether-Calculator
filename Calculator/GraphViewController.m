@@ -34,6 +34,9 @@
     
     UIPinchGestureRecognizer *pinchRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:graphView action:@selector(pinch:)];
     [graphView addGestureRecognizer:pinchRecognizer];
+    
+    UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:graphView action:@selector(pan:)];
+    [graphView addGestureRecognizer:panRecognizer];
 }
 
 #pragma mark - View lifecycle

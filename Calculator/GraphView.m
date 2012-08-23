@@ -118,11 +118,20 @@
 
 #pragma mark - UIGestureRecognizer
 
-- (void)pinch:(UIPinchGestureRecognizer *)gestureRecognizer;
+- (void)pinch:(UIPinchGestureRecognizer *)gestureRecognizer
 {    
     if (gestureRecognizer.state == UIGestureRecognizerStateEnded || gestureRecognizer.state == UIGestureRecognizerStateChanged) {
         self.scale *= gestureRecognizer.scale;
         gestureRecognizer.scale = 1;
+    }
+}
+
+- (void)pan:(UIPanGestureRecognizer *)gestureRecognizer
+{
+    if (gestureRecognizer.state == UIGestureRecognizerStateEnded || gestureRecognizer.state == UIGestureRecognizerStateChanged) {
+        CGPoint translation = [gestureRecognizer translationInView:self];
+        self.origin = CGPointMake(self.origin.x + translation.x, self.origin.y + translation.y);
+        [gestureRecognizer setTranslation:CGPointZero inView:self];
     }
 }
 
