@@ -21,5 +21,6 @@
 
 - (void)pinch:(UIPinchGestureRecognizer *)gestureRecognizer;
 - (void)pan:(UIPinchGestureRecognizer *)gestureRecognizer;
+- (void)trippleTap:(UITapGestureRecognizer *)gestureRecognizer;
 
 @end

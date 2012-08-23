@@ -135,4 +135,11 @@
     }
 }
 
+- (void)trippleTap:(UITapGestureRecognizer *)gestureRecognizer
+{
+    if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
+        self.origin = [gestureRecognizer locationInView:self];
+    }
+}
+
 @end

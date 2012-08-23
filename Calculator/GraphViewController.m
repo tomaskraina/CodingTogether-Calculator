@@ -37,6 +37,10 @@
     
     UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:graphView action:@selector(pan:)];
     [graphView addGestureRecognizer:panRecognizer];
+    
+    UITapGestureRecognizer *trippleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:graphView action:@selector(trippleTap:)];
+    trippleTapRecognizer.numberOfTapsRequired = 3;
+    [graphView addGestureRecognizer:trippleTapRecognizer];
 }
 
 #pragma mark - View lifecycle
