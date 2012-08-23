@@ -80,6 +80,8 @@
 {
     UIGraphicsPushContext(context);
     
+    CGContextSetStrokeColorWithColor(context, [[UIColor blueColor] CGColor]);
+    
     CGContextBeginPath(context);
     NSInteger minViewX = 0;
     NSInteger maxViewX = self.bounds.size.width;
