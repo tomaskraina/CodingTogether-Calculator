@@ -35,6 +35,13 @@
     return _origin;
 }
 
+- (void)setOrigin:(CGPoint)origin
+{
+    _origin = origin;
+    
+    [self setNeedsDisplay];
+}
+
 - (CGFloat)scale
 {
     if (_scale == 0) {
@@ -42,6 +49,13 @@
     }
     
     return _scale;
+}
+
+- (void)setScale:(CGFloat)scale
+{
+    _scale = scale;
+    
+    [self setNeedsDisplay];
 }
 
 - (CGPoint)pointInViewForPointInGraph:(CGPoint)point
