@@ -157,4 +157,10 @@
     }
 }
 
+- (IBAction)syncGraphViewControllerProgram
+{
+    GraphViewController *graphViewController = (GraphViewController *)[self.splitViewController.viewControllers lastObject];
+    graphViewController.program = self.brain.program;
+}
+
 @end
