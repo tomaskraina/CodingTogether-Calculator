@@ -88,14 +88,14 @@
     
     NSValue *previousYValue;
     for (CGFloat viewX = minViewX; viewX < maxViewX; viewX++) {
-        double xValue = [self pointInGraphForPointInView:CGPointMake(viewX, 0)].x;
+        CGFloat xValue = [self pointInGraphForPointInView:CGPointMake(viewX / self.contentScaleFactor, 0)].x;
         NSNumber *yValue = [self.datasource graphView:self yAxisValueForXAxisValue:[NSNumber numberWithDouble:xValue]];
         CGPoint pointInView = [self pointInViewForPointInGraph:CGPointMake(xValue, [yValue doubleValue])];
         if (!previousYValue) {
-            CGContextMoveToPoint(context, pointInView.x / self.contentScaleFactor, pointInView.y / self.contentScaleFactor);
+            CGContextMoveToPoint(context, pointInView.x, pointInView.y);
         }
         else if (yValue) {
-            CGContextAddLineToPoint(context, pointInView.x / self.contentScaleFactor, pointInView.y / self.contentScaleFactor);
+            CGContextAddLineToPoint(context, pointInView.x, pointInView.y);
         }
         
         previousYValue = yValue;
