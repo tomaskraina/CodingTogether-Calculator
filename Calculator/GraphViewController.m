@@ -44,7 +44,7 @@
     [super viewWillAppear:animated];
     
     // show description of program
-    self.descriptionLabel.text = [CalculatorBrain descriptionOfProgram:self.program];
+    self.descriptionLabel.text = [NSString stringWithFormat:@"y = %@", [CalculatorBrain descriptionOfProgram:self.program]];
 }
 
 - (void)viewDidUnload
