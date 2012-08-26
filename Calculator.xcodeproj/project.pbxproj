@@ -20,7 +20,6 @@
 		2C6561AA15C81479003B5045 /* iPhoneMainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C6561A815C81479003B5045 /* iPhoneMainStoryboard.storyboard */; };
 		2C6561AD15C81479003B5045 /* CalculatorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C6561AC15C81479003B5045 /* CalculatorViewController.m */; };
 		2C6561B515C8202D003B5045 /* CalculatorBrain.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C6561B415C8202D003B5045 /* CalculatorBrain.m */; };
-		2C79590515E6AC1100C374F2 /* iPadSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C79590415E6AC1100C374F2 /* iPadSplitViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,8 +45,6 @@
 		2C6561AC15C81479003B5045 /* CalculatorViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CalculatorViewController.m; sourceTree = "<group>"; };
 		2C6561B315C8202D003B5045 /* CalculatorBrain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalculatorBrain.h; sourceTree = "<group>"; };
 		2C6561B415C8202D003B5045 /* CalculatorBrain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalculatorBrain.m; sourceTree = "<group>"; };
-		2C79590315E6AC1100C374F2 /* iPadSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iPadSplitViewController.h; sourceTree = "<group>"; };
-		2C79590415E6AC1100C374F2 /* iPadSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iPadSplitViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,8 +111,6 @@
 				2C6561B415C8202D003B5045 /* CalculatorBrain.m */,
 				2C6561AB15C81479003B5045 /* CalculatorViewController.h */,
 				2C6561AC15C81479003B5045 /* CalculatorViewController.m */,
-				2C79590315E6AC1100C374F2 /* iPadSplitViewController.h */,
-				2C79590415E6AC1100C374F2 /* iPadSplitViewController.m */,
 				2C65619D15C81478003B5045 /* Supporting Files */,
 			);
 			path = Calculator;
@@ -205,7 +200,6 @@
 				2C4920A515DD669900ABF0D9 /* GraphViewController.m in Sources */,
 				2C4920A915DD686900ABF0D9 /* GraphView.m in Sources */,
 				2C50567115E4EE6F006240AB /* AxesDrawer.m in Sources */,
-				2C79590515E6AC1100C374F2 /* iPadSplitViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

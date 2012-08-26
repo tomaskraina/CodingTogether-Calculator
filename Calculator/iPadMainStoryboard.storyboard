@@ -10,7 +10,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lnw-0K-oz9" sceneMemberID="firstResponder"/>
                 <viewController id="iZG-Ac-878" customClass="CalculatorViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5Cw-B6-vyU">
-                        <rect key="frame" x="0.0" y="64" width="320" height="788"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="704"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="0" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" id="vmx-qr-TGf">
@@ -434,6 +434,7 @@
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     </view>
                     <navigationItem key="navigationItem" id="GZ3-ap-wcE"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackTranslucent"/>
@@ -462,31 +463,33 @@
         <scene sceneID="xwR-Fx-6Ak">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sxt-ae-QUh" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <splitViewController id="19B-ox-gON" customClass="iPadSplitViewController" sceneMemberID="viewController">
+                <splitViewController id="19B-ox-gON" sceneMemberID="viewController">
                     <toolbarItems/>
+                    <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     <connections>
                         <segue destination="qFM-zS-Xvb" kind="relationship" relationship="masterViewController" id="Egw-nI-gSx"/>
                         <segue destination="tJD-gd-PSC" kind="relationship" relationship="detailViewController" id="F9z-J8-HxW"/>
                     </connections>
                 </splitViewController>
             </objects>
-            <point key="canvasLocation" x="-1971" y="-516"/>
+            <point key="canvasLocation" x="-2231" y="-516"/>
         </scene>
         <scene sceneID="fI9-g4-DFJ">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="i6d-7z-wME" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="tJD-gd-PSC" customClass="GraphViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="VS8-Cx-L2P">
-                        <rect key="frame" x="0.0" y="20" width="768" height="1004"/>
+                        <rect key="frame" x="0.0" y="20" width="703" height="748"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <view contentMode="redraw" id="SBR-YR-auc" customClass="GraphView">
-                                <rect key="frame" x="0.0" y="0.0" width="768" height="1004"/>
+                                <rect key="frame" x="0.0" y="0.0" width="703" height="748"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     </view>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackTranslucent"/>
                     <connections>
@@ -515,9 +518,6 @@
                 <relationship kind="outlet" name="descriptionLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="graphView" candidateClass="GraphView"/>
             </relationships>
-        </class>
-        <class className="iPadSplitViewController" superclassName="UISplitViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/iPadSplitViewController.h"/>
         </class>
     </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
