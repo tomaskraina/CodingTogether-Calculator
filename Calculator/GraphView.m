@@ -76,7 +76,7 @@
     return pointInGraph;
 }
 
-- (void)drawGraphInContext:(CGContextRef)context
+- (void)drawGraphByLinesInContext:(CGContextRef)context
 {
     UIGraphicsPushContext(context);
     
@@ -102,9 +102,30 @@
     }
     CGContextStrokePath(context);
 
-    
     UIGraphicsPopContext();
 }
+
+- (void)drawGraphByDotsInContext:(CGContextRef)context
+{
+    UIGraphicsPushContext(context);
+    
+    CGContextSetFillColorWithColor(context, [[UIColor blueColor] CGColor]);
+    
+    NSInteger minViewX = 0;
+    NSInteger maxViewX = self.bounds.size.width * self.contentScaleFactor;
+    
+    for (CGFloat viewX = minViewX; viewX < maxViewX; viewX++) {
+        CGFloat xValue = [self pointInGraphForPointInView:CGPointMake(viewX / self.contentScaleFactor, 0)].x;
+        NSNumber *yValue = [self.datasource graphView:self yAxisValueForXAxisValue:[NSNumber numberWithDouble:xValue]];
+        CGPoint pointInView = [self pointInViewForPointInGraph:CGPointMake(xValue, [yValue doubleValue])];
+        if (yValue) {
+            CGContextFillRect(context, CGRectMake(pointInView.x, pointInView.y, 1 / self.contentScaleFactor, 1 / self.contentScaleFactor));
+        }
+        
+        UIGraphicsPopContext();
+    }
+}
+
 
 - (void)drawRect:(CGRect)rect
 {
@@ -113,7 +134,8 @@
     
     // Draw the graph
     CGContextRef context = UIGraphicsGetCurrentContext();
-    [self drawGraphInContext:context];
+//    [self drawGraphByLinesInContext:context];
+    [self drawGraphByDotsInContext:context];
 }
 
 #pragma mark - UIGestureRecognizer
