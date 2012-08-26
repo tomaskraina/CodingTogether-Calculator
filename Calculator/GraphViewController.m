@@ -51,6 +51,22 @@
     [graphView addGestureRecognizer:trippleTapRecognizer];
 }
 
+- (void)saveGraphViewProperties
+{
+    // save view's scale and origin to NSUserDefaults
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setDouble:self.graphView.scale forKey:[NSString stringWithFormat:@"GraphView%i.scale", self.graphView.tag]];
+    [defaults setDouble:self.graphView.origin.x forKey:[NSString stringWithFormat:@"GraphView%i.origin.x", self.graphView.tag]];
+    [defaults setDouble:self.graphView.origin.y forKey:[NSString stringWithFormat:@"GraphView%i.origin.y", self.graphView.tag]];
+}
+
+- (void)loadGraphViewProperties
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    self.graphView.scale = [defaults doubleForKey:[NSString stringWithFormat:@"GraphView%i.scale", self.graphView.tag]];
+    self.graphView.origin = CGPointMake([defaults doubleForKey:[NSString stringWithFormat:@"GraphView%i.origin.x", self.graphView.tag]], [defaults doubleForKey:[NSString stringWithFormat:@"GraphView%i.origin.y", self.graphView.tag]]);
+}
+
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad
@@ -58,11 +74,11 @@
     [super viewDidLoad];
     
     self.graphView.datasource = self;
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    self.graphView.scale = [defaults doubleForKey:[NSString stringWithFormat:@"GraphView%i.scale", self.graphView.tag]];
-    self.graphView.origin = CGPointMake([defaults doubleForKey:[NSString stringWithFormat:@"GraphView%i.origin.x", self.graphView.tag]], [defaults doubleForKey:[NSString stringWithFormat:@"GraphView%i.origin.y", self.graphView.tag]]);
+    [self loadGraphViewProperties];
     
     self.splitViewController.delegate = self;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(saveGraphViewProperties) name:UIApplicationDidEnterBackgroundNotification object:nil];
 }
 
 
@@ -76,11 +92,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    // save view's scale and origin to NSUserDefaults
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setDouble:self.graphView.scale forKey:[NSString stringWithFormat:@"GraphView%i.scale", self.graphView.tag]];
-    [defaults setDouble:self.graphView.origin.x forKey:[NSString stringWithFormat:@"GraphView%i.origin.x", self.graphView.tag]];
-    [defaults setDouble:self.graphView.origin.y forKey:[NSString stringWithFormat:@"GraphView%i.origin.y", self.graphView.tag]];
+    [self saveGraphViewProperties];
 }
 
 - (void)viewDidUnload
@@ -90,6 +102,8 @@
     // Release any retained subviews of the main view.
     self.descriptionLabel = nil;
     self.graphView = nil;
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
