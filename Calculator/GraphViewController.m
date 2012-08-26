@@ -9,14 +9,16 @@
 #import "GraphViewController.h"
 #import "CalculatorBrain.h"
 
-@interface GraphViewController()
+@interface GraphViewController() <UISplitViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
 @property (weak, nonatomic) IBOutlet GraphView *graphView;
+@property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 @end
 
 @implementation GraphViewController
 @synthesize descriptionLabel = _descriptionLabel;
 @synthesize graphView = _graphView;
+@synthesize toolbar = _toolbar;
 @synthesize program = _program;
 
 
@@ -59,6 +61,8 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     self.graphView.scale = [defaults doubleForKey:[NSString stringWithFormat:@"GraphView%i.scale", self.graphView.tag]];
     self.graphView.origin = CGPointMake([defaults doubleForKey:[NSString stringWithFormat:@"GraphView%i.origin.x", self.graphView.tag]], [defaults doubleForKey:[NSString stringWithFormat:@"GraphView%i.origin.y", self.graphView.tag]]);
+    
+    self.splitViewController.delegate = self;
 }
 
 
@@ -81,6 +85,7 @@
 
 - (void)viewDidUnload
 {
+    [self setToolbar:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     self.descriptionLabel = nil;
@@ -104,6 +109,23 @@
     NSDictionary *variableValues = [NSDictionary dictionaryWithObject:xValue forKey:@"x"];
     NSNumber *yValue = [CalculatorBrain runProgram:self.program usingVariableValues:variableValues];
     return yValue;
+}
+
+#pragma mark - UISplitViewControllerDelegate
+
+- (void)splitViewController:(UISplitViewController *)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem *)barButtonItem forPopoverController:(UIPopoverController *)pc
+{
+    barButtonItem.title = aViewController.title;
+    NSMutableArray *toolbarItems = [self.toolbar.items mutableCopy];
+    [toolbarItems insertObject:barButtonItem atIndex:0];
+    self.toolbar.items = toolbarItems;
+}
+
+- (void)splitViewController:(UISplitViewController *)svc willShowViewController:(UIViewController *)aViewController invalidatingBarButtonItem:(UIBarButtonItem *)button
+{
+    NSMutableArray *toolbarItems = [self.toolbar.items mutableCopy];
+    [toolbarItems removeObject:button];
+    self.toolbar.items = toolbarItems;
 }
 
 @end
