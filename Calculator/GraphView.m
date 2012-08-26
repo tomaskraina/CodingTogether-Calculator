@@ -16,6 +16,7 @@
 @synthesize datasource = _datasource;
 @synthesize origin = _origin;
 @synthesize scale = _scale;
+@synthesize mode = _mode;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -54,6 +55,13 @@
 - (void)setScale:(CGFloat)scale
 {
     _scale = scale;
+    
+    [self setNeedsDisplay];
+}
+
+- (void)setMode:(GraphViewMode)mode
+{
+    _mode = mode;
     
     [self setNeedsDisplay];
 }
@@ -134,8 +142,15 @@
     
     // Draw the graph
     CGContextRef context = UIGraphicsGetCurrentContext();
-//    [self drawGraphByLinesInContext:context];
-    [self drawGraphByDotsInContext:context];
+    switch (self.mode) {
+        case GraphViewModeDots:
+            [self drawGraphByDotsInContext:context];
+            break;
+            
+        default:
+            [self drawGraphByLinesInContext:context];
+            break;
+    }
 }
 
 #pragma mark - UIGestureRecognizer

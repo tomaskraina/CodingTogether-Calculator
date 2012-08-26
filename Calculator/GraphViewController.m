@@ -142,4 +142,18 @@
     self.toolbar.items = toolbarItems;
 }
 
+#pragma mark - UISegmentedControl
+- (IBAction)changeGraphMode:(UISegmentedControl *)sender
+{
+    switch (sender.selectedSegmentIndex) {
+        case 0:
+            self.graphView.mode = GraphViewModeLine;
+            break;
+            
+        case 1:
+            self.graphView.mode = GraphViewModeDots;
+            break;
+    }
+}
+
 @end

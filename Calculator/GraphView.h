@@ -14,10 +14,16 @@
 - (NSNumber *)graphView:(GraphView *)graphView yAxisValueForXAxisValue:(NSNumber *)xAxisValue;
 @end
 
+typedef enum {
+    GraphViewModeDots = 1,
+    GraphViewModeLine
+} GraphViewMode;
+
 @interface GraphView : UIView
 @property(weak, nonatomic) id<GraphViewDataSource> datasource;
 @property(nonatomic) CGPoint origin;
 @property(nonatomic) CGFloat scale;
+@property(nonatomic) GraphViewMode mode;
 
 - (void)pinch:(UIPinchGestureRecognizer *)gestureRecognizer;
 - (void)pan:(UIPinchGestureRecognizer *)gestureRecognizer;
