@@ -60,11 +60,15 @@
 
 + (NSSet *)supportedOperations
 {
-    NSSet *supportedOperations = [[self class] noOperandOperations];
-    supportedOperations = [supportedOperations setByAddingObjectsFromSet:[[self class] oneOperandOperations]];
-    supportedOperations = [supportedOperations setByAddingObjectsFromSet:[[self class] twoOperandOperations]];
+    static dispatch_once_t once;
+    static NSSet *_supportedOperations;
+    dispatch_once(&once, ^{
+        _supportedOperations = [[self class] noOperandOperations];
+        _supportedOperations = [_supportedOperations setByAddingObjectsFromSet:[[self class] oneOperandOperations]];
+        _supportedOperations = [_supportedOperations setByAddingObjectsFromSet:[[self class] twoOperandOperations]];
+    });
     
-    return supportedOperations;
+    return _supportedOperations;
 }
 
 + (NSSet *)associativeOperations
